@@ -1,0 +1,6 @@
+provinsi_id,provinsi,kota_id,kota,kecamatan_id,kecamatan,kelurahan_id,kelurahan,kode_pos
+1,Riau,101,Pekanbaru,1001,Sukajadi,10001,Kampung Melayu,28122
+2,Riau,101,Pekanbaru,1001,Sukajadi,10002,Sidomulyo Barat,28123
+3,Riau,101,Pekanbaru,1002,Marpoyan Damai,10003,Tangerang,28125
+4,Riau,102,Dumai,1003,Dumai Kota,10004,Bagan Besar,28811
+5,Jawa Barat,201,Bandung,2001,Coblong,20001,Dago,40135
