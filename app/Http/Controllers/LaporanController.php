@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pengiriman;
+use App\Models\Penjualan;
 use PDF;
 use Illuminate\Http\Request;
 
@@ -51,5 +52,21 @@ class LaporanController extends Controller
         $pdf = PDF::loadView('laporan.pengiriman_pdf', compact('pengiriman'));
 
         return $pdf->download('laporan_pengiriman.pdf');
+    }
+
+    public function adminIndex()
+    {
+        $laporan = Penjualan::with('user', 'details.produk')->latest()->get();
+        return view('laporan.admin', compact('laporan'));
+    }
+
+    public function userIndex()
+    {
+        $laporan = Penjualan::with('details.produk', 'pengiriman') // tambahkan 'pengiriman'
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->get();
+
+        return view('laporan.user', compact('laporan')); // pastikan variabel $laporan dikirim
     }
 }

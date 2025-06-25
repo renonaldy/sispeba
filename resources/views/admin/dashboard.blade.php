@@ -36,7 +36,7 @@
                                             alt="chart success" class="rounded" />
                                     </div>
                                 </div>
-                                <p class="mb-1">Profit</p>
+                                <p class="mb-1">Pesanan</p>
                                 <h4 class="card-title mb-3">${{ number_format($totalProfit ?? 0) }}</h4>
                                 <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
                             </div>
@@ -51,7 +51,7 @@
                                             alt="wallet info" class="rounded" />
                                     </div>
                                 </div>
-                                <p class="mb-1">Sales</p>
+                                <p class="mb-1">Penjualan</p>
                                 <h4 class="card-title mb-3">${{ number_format($totalSales ?? 0) }}</h4>
                                 <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> +28.42%</small>
                             </div>
@@ -81,7 +81,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p class="mb-1">Payments</p>
+                                <p class="mb-1">Produk</p>
                                 <h4 class="card-title mb-3">$2,456</h4>
                                 <small class="text-danger fw-medium"><i class="icon-base bx bx-down-arrow-alt"></i>
                                     -14.82%</small>

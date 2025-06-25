@@ -15,33 +15,11 @@ class KotaSeeder extends Seeder
     {
         //
 
-        $this->call(KotaSeeder::class);
-        $kotaPekanbaru = [
-            'Bukit Raya',
-            'Lima Puluh',
-            'Marpoyan Damai',
-            'Payung Sekaki',
-            'Pekanbaru Kota',
-            'Rumbai',
-            'Rumbai Barat',
-            'Sail',
-            'Senapelan',
-            'Sukajadi',
-            'Tampan',
-            'Tenayan Raya',
-            'Rumbai Timur',
-            'Binawidya',
-            'Tuah Madani',
-        ];
-
-
-
-        foreach ($kotaPekanbaru as $nama) {
-            DB::table('kotas')->insert([
-                'nama'       => $nama,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+        DB::table('kotas')->insert([
+            ['nama' => 'Pekanbaru'],
+            ['nama' => 'Dumai'],
+            // ['nama_kota' => 'Surabaya'],
+            // Tambahkan data kota lainnya
+        ]);
     }
 }

@@ -19,6 +19,15 @@ class Pengiriman extends Model
         'kode_pos',
         // 'alamat_tujuan',
         'status',
+        'pembelian_id',
+        // 'nama_pengirim',
+        // 'nama_penerima',
+        // 'alamat',
+        // 'kota',
+        // 'kode_pos',
+        'status',
+        'no_resi',
+        'tanggal_kirim',
     ];
 
     protected $attributes = [
@@ -38,5 +47,17 @@ class Pengiriman extends Model
     public function kurir()
     {
         return $this->belongsTo(User::class, 'kurir_id');
+    }
+
+    public function penjualan()
+    {
+        return $this->belongsTo(Penjualan::class);
+    }
+
+
+
+    public function pembelian()
+    {
+        return $this->belongsTo(Pembelian::class);
     }
 }

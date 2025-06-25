@@ -56,4 +56,9 @@ class User extends Authenticatable
     {
         $this->notify(new CustomResetPassword($token));
     }
+
+    public function pembelian()
+    {
+        return $this->hasMany(Pembelian::class);
+    }
 }

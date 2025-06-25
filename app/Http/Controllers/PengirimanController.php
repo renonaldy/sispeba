@@ -22,6 +22,8 @@ class PengirimanController extends Controller
 
         // $pengirimans = Pengiriman::latest()->paginate(10);
         // return view('pengiriman.index', compact('pengirimans'));
+
+        // $pengirimans = Pengiriman::with(['user', 'statuses'])->latest()->get();
         $user = Auth::user();
 
         // Jika admin, ambil semua pengiriman

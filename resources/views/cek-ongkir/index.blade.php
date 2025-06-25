@@ -91,7 +91,7 @@
                     <p>Asal: <strong>{{ session('asal') }}</strong></p>
                     <p>Tujuan: <strong>{{ session('tujuan') }}</strong></p>
                     <p>Berat: <strong>{{ session('berat') }} kg</strong></p>
-                    <p>Jarak: <strong>{{ session('jarak') }} km</strong></p>
+                    {{-- <p>Jarak: <strong>{{ session('jarak') }} km</strong></p> --}}
                     <p>Ongkir: <strong>Rp {{ number_format(session('ongkir'), 0, ',', '.') }}</strong></p>
                 </div>
             </div>

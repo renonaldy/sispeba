@@ -26,7 +26,7 @@
                             <td>{{ $pengiriman->no_resi }}</td>
                             <td>{{ $pengiriman->nama_penerima }}</td>
                             <td>{{ $pengiriman->nama_pengirim }}</td>
-                            <td>{{ $pengiriman->alamat_lengkap }}</td>
+                            <td>{{ $pengiriman->alamat }}</td>
                             {{-- <td>{{ $pengiriman->kota }}</td> --}}
                             {{-- <td>{{ $pengiriman->kode_pos }}</td> --}}
                             <td>

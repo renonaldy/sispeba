@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\LaporanPembelianController;
+use App\Http\Controllers\Admin\RekeningBankController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -10,8 +12,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\OngkirController;
+use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PengirimanController;
+use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TugasController;
 use App\Models\Kelurahan;
 use Illuminate\Http\Request;
 // use Illuminate\Container\Attributes\Auth;
@@ -136,6 +142,16 @@ Route::get('/tracking/{no_resi}', [CekResiController::class, 'tracking'])->name(
 // Data Laporan
 Route::get('/laporan/pengiriman', [LaporanController::class, 'index'])->name('laporan.pengiriman');
 Route::get('/laporan/pengiriman/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.pengiriman.pdf');
+// Admin melihat semua laporan
+Route::middleware(['auth', 'role:admin'])->get('/laporan-admin', [LaporanController::class, 'adminIndex'])->name('laporan.admin');
+
+// User hanya melihat laporannya sendiri
+Route::middleware(['auth', 'role:user'])->get('/laporan-user', [LaporanController::class, 'userIndex'])->name('laporan.user');
+
+Route::delete('/admin/laporan-pembelian/{id}', [\App\Http\Controllers\Admin\LaporanPembelianController::class, 'destroy'])->name('admin.laporan_pembelian.destroy');
+Route::get('/admin/laporan-pembelian/bukti/{id}', [LaporanPembelianController::class, 'downloadBukti'])->name('admin.laporan_pembelian.download-bukti');
+Route::get('/bukti-pembayaran/{filename}', [LaporanPembelianController::class, 'tampilkanBukti'])
+    ->name('admin.laporan_pembelian.tampilkan-bukti');
 
 
 // Kurir - Tugas Pengiriman
@@ -171,7 +187,7 @@ Route::get('/get-provinsi', function () {
 Route::get('/get-kota', function (Request $request) {
     $provinsi = $request->get('provinsi');
 
-    return \App\Models\Kelurahan::where('provinsi', $provinsi)
+    return Kelurahan::where('provinsi', $provinsi)
         ->select('kota')->distinct()->orderBy('kota')->get();
 });
 
@@ -198,6 +214,106 @@ Route::middleware(['auth'])->group(function () {
 
 Route::post('/cek-ongkir', [CekOngkirController::class, 'calculate'])->name('ongkir.calculate');
 Route::get('/riwayat-ongkir', [CekOngkirController::class, 'riwayat'])->name('ongkir.riwayat');
+
+Route::resource('produk', ProdukController::class);
+// Route::put('/produk/{produk}', [ProdukController::class, 'update'])->name('produk.update');
+
+Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
+Route::get('/penjualan/create', [PenjualanController::class, 'create'])->name('penjualan.create');
+Route::post('/penjualan', [PenjualanController::class, 'store'])->name('penjualan.store');
+
+Route::get('/belanja', [PelangganController::class, 'index'])->name('belanja.index');
+Route::post('/belanja/beli', [PelangganController::class, 'beli'])->name('belanja.beli');
+
+Route::middleware(['auth', 'role:user'])->group(function () {
+    Route::get('/belanja', [PelangganController::class, 'index'])->name('belanja.index');
+    Route::post('/belanja/beli', [PelangganController::class, 'beli'])->name('belanja.beli');
+});
+
+Route::get('/riwayat-belanja', [PelangganController::class, 'riwayat'])->name('belanja.riwayat');
+
+// Route::middleware(['auth', 'role:user'])->group(function () {
+//     Route::get('/keranjang', [PelangganController::class, 'keranjang'])->name('keranjang.index');
+//     Route::post('/keranjang/tambah', [PelangganController::class, 'tambahKeranjang'])->name('keranjang.tambah');
+//     Route::post('/keranjang/hapus', [PelangganController::class, 'hapusKeranjang'])->name('keranjang.hapus');
+//     Route::post('/keranjang/checkout', [PelangganController::class, 'checkout'])->name('keranjang.checkout');
+// });
+
+// Route::get('/riwayat-pembelian', [PelangganController::class, 'riwayat'])->name('riwayat.pembelian');
+// Route::get('/riwayat', [PelangganController::class, 'riwayat'])->middleware(['auth', 'role:user'])->name('pelanggan.riwayat');
+// Route::post('/keranjang/simpan-informasi', [PelangganController::class, 'simpanInformasiPengiriman'])->name('keranjang.simpanInformasi');
+// Route::get('/keranjang/pembayaran', [PelangganController::class, 'pembayaran'])->name('keranjang.pembayaran');
+// // Route::post('/keranjang/pembayaran', [PelangganController::class, 'prosesCheckout'])->name('keranjang.pembayaran.proses');
+// Route::get('/keranjang/cod-proses', [PelangganController::class, 'prosesCod'])->name('keranjang.cod.proses');
+// Route::post('/keranjang/checkout', [PelangganController::class, 'checkout'])->name('keranjang.checkout');
+// Route::post('/keranjang/pembayaran/proses', [PelangganController::class, 'prosesCheckout'])->name('keranjang.pembayaran.proses');
+
+Route::middleware(['auth', 'role:user'])->group(function () {
+    Route::get('/keranjang', [PelangganController::class, 'keranjang'])->name('keranjang.index');
+    Route::post('/keranjang/tambah', [PelangganController::class, 'tambahKeranjang'])->name('keranjang.tambah');
+    Route::post('/keranjang/hapus', [PelangganController::class, 'hapusKeranjang'])->name('keranjang.hapus');
+    Route::post('/keranjang/checkout', [PelangganController::class, 'checkout'])->name('keranjang.checkout');
+    Route::get('/keranjang/pembayaran', [PelangganController::class, 'pembayaran'])->name('keranjang.pembayaran');
+    Route::post('/keranjang/pembayaran/proses', [PelangganController::class, 'prosesCheckout'])->name('keranjang.pembayaran.proses');
+    Route::get('/keranjang/cod-proses', [PelangganController::class, 'prosesCod'])->name('keranjang.cod.proses');
+    Route::get('/riwayat', [PelangganController::class, 'riwayat'])->middleware(['auth', 'role:user'])->name('pelanggan.riwayat');
+    Route::get('/keranjang/pembayaran/proses', function () {
+        return redirect()->route('keranjang.index')->with('error', 'Akses tidak sah.');
+    });
+});
+
+Route::middleware(['auth', 'role:kurir'])->group(function () {
+    Route::get('/kurir/tugas', [TugasController::class, 'index'])->name('kurir.tugas.index');
+});
+
+
+Route::get('/get-ongkir/{kelurahan}', function ($kelurahan) {
+    $data = \App\Models\Kelurahann::where('kelurahan', $kelurahan)->first();
+    $ongkir = $data->tarif_ongkir ?? 0;
+    return response()->json(['ongkir' => $ongkir]);
+});
+
+
+
+
+Route::post('/keranjang/simpan-pengiriman', [PelangganController::class, 'simpanInformasiPengiriman'])
+    ->name('keranjang.simpanPengiriman');
+
+
+// routes/web.php
+// routes/web.php
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('rekening', RekeningBankController::class);
+});
+
+// routes/web.php
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('laporan-pembelian', [LaporanPembelianController::class, 'index'])->name('laporan.pembelian');
+});
+Route::post('admin/laporan-pembelian/{id}/kirim', [LaporanPembelianController::class, 'prosesPengiriman'])
+    ->middleware(['auth', 'role:admin'])
+    ->name('admin.laporan-pembelian.kirim');
+
+// routes/web.php
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('laporan_pembelian', [LaporanPembelianController::class, 'index'])->name('laporan_pembelian.index');
+    // Route::get('laporan-pembelian', [LaporanPembelianController::class, 'index'])->name('laporan.pembelian');
+    Route::get('laporan-pembelian/{id}/proses-pengiriman', [LaporanPembelianController::class, 'formPengiriman'])->name('laporan_pembelian.form-pengiriman');
+    Route::post('laporan-pembelian/{id}/proses-pengiriman', [LaporanPembelianController::class, 'simpanPengiriman'])->name('laporan_pembelian.simpan-pengiriman');
+});
+
+Route::post('admin/laporan-pembelian/{id}/proses-pengiriman', [LaporanPembelianController::class, 'simpanPengiriman'])
+    ->middleware(['auth', 'role:admin'])
+    ->name('admin.laporan_pembelian.simpan-pengiriman');
+
+
+// Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
+//     Route::get('laporan_pembelian'e, [LaporanPembelianController::class, 'index'])->name('laporan_pembelian.index');
+//     Route::get('laporan-pembelian/{id}/proses-pengiriman', [LaporanPembelianController::class, 'formPengiriman'])->name('laporan_pembelian.form-pengiriman');
+//     Route::post('laporan-pembelian/{id}/proses-pengiriman', [LaporanPembelianController::class, 'simpanPengiriman'])->name('laporan_pembelian.simpan-pengiriman');
+// });
+
 
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
